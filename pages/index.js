@@ -1,22 +1,47 @@
 import {useState, useEffect} from "react";
+import {Press_Start_2P} from "next/font/google";
+
+//  Todos😀
+// 1. Om ormen äter upp kaninen så ska den bli längre
+// 2. Lägga till så att kaninen bara syns på skärmen nör spelet har startat och så att den bara syns ifall
+// 3. Ifall ormen går utanför skärmen i x-led så ska den flyttas till andra sidan på spel-blocket
+// 4. Poäng system för varje gång den äter upp en kanin
+// 5. Svårighetsgrad exempel: om ma har 10 poäng så ökar hastigheten
+// 6. Bakgrundmuisk med mute knapp
+// 7. Ljud effekt för varje gång den käkar en kanin(poäng), gameover,start game,
+// 8. Deisgna första sidan: spelinstriktioner, start game, highscore
+// 9. Localstorage med highscore function
+// 10. Responsive desgn
+
+const pixelFont = Press_Start_2P({
+  // Pixel font
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function Home() {
   const [position, setPosition] = useState({x: 0, y: 0}); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
-  const [speed, setSpeed] = useState(15); // Speed för Snake
+  const [speed, setSpeed] = useState(10); // Speed för Snake
+  const [rabbitPos, setRabbitPos] = useState({}); // Postion för Rabbit
+
+  useEffect(() => {
+    setRabbitPos({x: Math.random() * 565, y: Math.random() * 565});
+  }, []);
 
   // Funtion som tar hand om riktningen
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setPosition((prev) => ({...prev, y: prev.y + speed})); // Move down
+        return setPosition((prev) => ({...prev, y: prev.y + speed})); // Gå ner
       case "up-direction":
-        return setPosition((prev) => ({...prev, y: prev.y - speed})); // Move up
+        return setPosition((prev) => ({...prev, y: prev.y - speed})); // Gå upp
       case "right-direction":
-        return setPosition((prev) => ({...prev, x: prev.x + speed})); // Move rightw
+        return setPosition((prev) => ({...prev, x: prev.x + speed})); // Gå höger
       case "left-direction":
-        return setPosition((prev) => ({...prev, x: prev.x - speed})); // Move leftd
+        return setPosition((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
       default:
         return;
     }
@@ -27,20 +52,38 @@ export default function Home() {
 
     if (e.key === "w" || e.key === "W" || e.key === "ArrowUp") {
       // Y led uppåt
-
-      setDirection("up-direction");
+      setDirection((prev) => {
+        if (prev === "down-direction") {
+          return prev;
+        }
+        return "up-direction";
+      });
     } else if (e.key === "s" || e.key === "S" || e.key === "ArrowDown") {
-      // Y led neddåt
-
-      setDirection("down-direction");
+      // Y led neddåtswsws
+      setDirection((prev) => {
+        if (prev === "up-direction") {
+          return prev;
+        }
+        return "down-direction";
+      });
     } else if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") {
       // X led vänster
-
-      setDirection("left-direction");
+      setDirection((prev) => {
+        if (prev === "right-direction") {
+          return prev;
+        }
+        return "left-direction";
+      });
     } else if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") {
-      // X led Höger
+      // X led höger
 
-      setDirection("right-direction");
+      setDirection((prev) => {
+        if (prev === "left-direction") {
+          console.log("prev: ");
+          return prev;
+        }
+        return "right-direction";
+      });
     }
   }
 
@@ -59,17 +102,26 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h1>Snake Game</h1>
+    <div className="flex flex-col justify-center items-center min-h-screen w-full">
+      <h1 className={`text-4xl mb-10 ${pixelFont.className} `}>Snake Game</h1>
+
       <div className="flex justify-center items-center w-[600px] h-[600px] relative border-8 overflow-hidden">
-        <div> 🐇 </div>
+        <div
+          className="w-[20px] h-[20px] absolute"
+          style={{
+            top: rabbitPos.y, // säkerställ att den är inom containern
+            left: rabbitPos.x, // säkerställ att den är inom containern
+          }}
+        >
+          {" "}
+          🐇{" "}
+        </div>
         {isPlaying ? (
           <div
-            className="w-[20px] h-[20px] bg-green-400"
+            className="w-[20px] h-[20px] bg-green-400 absolute"
             style={{
-              position: "absolute",
-              top: `${position.y}px`,
-              left: `${position.x}px`,
+              top: `${Math.max(0, Math.min(position.y, 565))}px`, // går inte utanför containern
+              left: `${Math.max(0, Math.min(position.x, 565))}px`, // går inte utanför containern
             }}
           ></div>
         ) : (

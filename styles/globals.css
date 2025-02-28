@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* @import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Press+Start+2P&display=swap");
+
+.pixel-font {
+  font-family: "Press Start 2P", cursive;
+} */
+
 /* @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
