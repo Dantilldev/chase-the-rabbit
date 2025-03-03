@@ -1,5 +1,5 @@
-import {useState, useEffect} from "react";
-import {Press_Start_2P} from "next/font/google";
+import { useState, useEffect } from "react";
+import { Press_Start_2P } from "next/font/google";
 
 //  Todos😀
 // 1. Om ormen äter upp kaninen så ska den bli längre
@@ -21,27 +21,27 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Home() {
-  const [position, setPosition] = useState({x: 0, y: 0}); // Postion för Snake
+  const [position, setPosition] = useState({ x: 0, y: 0 }); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
   const [rabbitPos, setRabbitPos] = useState({}); // Postion för Rabbit
 
   useEffect(() => {
-    setRabbitPos({x: Math.random() * 565, y: Math.random() * 565});
+    setRabbitPos({ x: Math.random() * 565, y: Math.random() * 565 });
   }, []);
 
   // Funtion som tar hand om riktningen
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setPosition((prev) => ({...prev, y: prev.y + speed})); // Gå ner
+        return setPosition((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
       case "up-direction":
-        return setPosition((prev) => ({...prev, y: prev.y - speed})); // Gå upp
+        return setPosition((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
       case "right-direction":
-        return setPosition((prev) => ({...prev, x: prev.x + speed})); // Gå höger
+        return setPosition((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
       case "left-direction":
-        return setPosition((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
+        return setPosition((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
       default:
         return;
     }
@@ -127,7 +127,7 @@ export default function Home() {
         ) : (
           <button
             onClick={() => {
-              setPosition({y: 300, x: 300});
+              setPosition({ y: 300, x: 300 });
               setIsPlaying(true);
             }}
             className="bg-green-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all"
@@ -136,6 +136,7 @@ export default function Home() {
           </button>
         )}
       </div>
+      <p className={`text-1xl mb-10 ${pixelFont.className}`}>Score: 0</p>
     </div>
   );
 }
