@@ -1,57 +1,57 @@
-import { useState, useEffect } from "react";
-import { Press_Start_2P } from "next/font/google";
+import {useState, useEffect} from "react";
+import {Press_Start_2P} from "next/font/google";
 
 //  Todos😀
-// 1. Om ormen äter upp kaninen så ska den bli längre
-// 2. Lägga till så att kaninen bara syns på skärmen nör spelet har startat och så att den bara syns ifall
-// 3. Ifall ormen går utanför skärmen i x-led så ska den flyttas till andra sidan på spel-blocket
-// 4. Poäng system för varje gång den äter upp en kanin
-// 5. Svårighetsgrad exempel: om ma har 10 poäng så ökar hastigheten
-// 6. Bakgrundmuisk med mute knapp
-// 7. Ljud effekt för varje gång den käkar en kanin(poäng), gameover,start game,
-// 8. Deisgna första sidan: spelinstriktioner, start game, highscore
-// 9. Localstorage med highscore function
-// 10. Responsive desgn
+// 1. Fixa så att kaninen inte kan spawna i röda blocken
+// 2. Fixa collison mellan ormen och blocket.
+// 3. Bakgrundmuisk med mute knapp
+// 4. Ljud effekt för varje gång den käkar en kanin(poäng), gameover,start game,
+// 5. Deisgna första sidan: spelinstriktioner, start game, highscore
+// 6. Localstorage med highscore function
+// 7. Responsive desgn
 
+// Pixel font
 const pixelFont = Press_Start_2P({
-  // Pixel font
   weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
 
 export default function Home() {
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({x: 0, y: 0}); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
+  const [score, setScore] = useState(0);
   const [rabbitPos, setRabbitPos] = useState({}); // Postion för Rabbit
+  const [gameover, setGameOver] = useState(false);
+  const [obstacle, setObstacle] = useState({x: 0, y: 0});
+  const [addObstacle, setAddObstacle] = useState([]);
 
   useEffect(() => {
-    setRabbitPos({ x: Math.random() * 565, y: Math.random() * 565 });
+    setRabbitPos({x: Math.random() * 565, y: Math.random() * 565});
+    setObstacle({x: Math.random() * 565, y: Math.random() * 565});
   }, []);
 
   // Funtion som tar hand om riktningen
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setPosition((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
+        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
       case "up-direction":
-        return setPosition((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
+        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
       case "right-direction":
-        return setPosition((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
+        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
       case "left-direction":
-        return setPosition((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
+        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
       default:
         return;
     }
   }
 
+  // Y led uppåt || Y led neddåt || X led vänster || X led höger
   function handleDirection(e) {
-    // clearInterval(directionInterval);
-
     if (e.key === "w" || e.key === "W" || e.key === "ArrowUp") {
-      // Y led uppåt
       setDirection((prev) => {
         if (prev === "down-direction") {
           return prev;
@@ -59,7 +59,6 @@ export default function Home() {
         return "up-direction";
       });
     } else if (e.key === "s" || e.key === "S" || e.key === "ArrowDown") {
-      // Y led neddåtswsws
       setDirection((prev) => {
         if (prev === "up-direction") {
           return prev;
@@ -67,7 +66,6 @@ export default function Home() {
         return "down-direction";
       });
     } else if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") {
-      // X led vänster
       setDirection((prev) => {
         if (prev === "right-direction") {
           return prev;
@@ -75,8 +73,6 @@ export default function Home() {
         return "left-direction";
       });
     } else if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") {
-      // X led höger
-
       setDirection((prev) => {
         if (prev === "left-direction") {
           console.log("prev: ");
@@ -86,6 +82,77 @@ export default function Home() {
       });
     }
   }
+
+  function updateSpeed() {
+    if (score >= 8 && score <= 12) {
+      setSpeed(12);
+    } else if (score > 12 && score <= 17) {
+      setSpeed(15);
+    } else if (score > 17 && score < 35) {
+      setSpeed(18);
+    }
+  }
+
+  function HandleAddObstacle() {
+    setAddObstacle([
+      ...addObstacle,
+      {x: Math.random() * 565, y: Math.random() * 565},
+    ]);
+  }
+
+  // checkar om ormen krockar med Obsatcles
+  function checkCollision() {
+    for (let i = 0; i < addObstacle.length; i++) {
+      if (
+        Math.abs(snakeHead.x - addObstacle[i].x) < 20 &&
+        Math.abs(snakeHead.y - addObstacle[i].y) < 20
+      ) {
+        setSpeed(10);
+        setIsPlaying(false);
+        setAddObstacle([]);
+        setScore(0);
+        setGameOver(true);
+        break;
+      }
+    }
+  }
+
+  // Funktion för att äta upp kaninen
+  function eatRabbit() {
+    if (
+      Math.abs(snakeHead.x - rabbitPos.x) < 15 &&
+      Math.abs(snakeHead.y - rabbitPos.y) < 15
+    ) {
+      setRabbitPos({
+        x: Math.floor(Math.random() * 565),
+        y: Math.floor(Math.random() * 565),
+      });
+
+      setScore(score + 1);
+      HandleAddObstacle();
+      checkCollision();
+    } else if (
+      snakeHead.x > 575 ||
+      snakeHead.y > 575 ||
+      snakeHead.x < -5 ||
+      snakeHead.y < -5
+    ) {
+      setAddObstacle([]);
+      setIsPlaying(false);
+      setSpeed(10);
+      setScore(0);
+      setGameOver(true);
+    }
+  }
+
+  useEffect(() => {
+    eatRabbit();
+    updateSpeed(speed);
+  }, [snakeHead]);
+
+  useEffect(() => {
+    checkCollision();
+  }, [snakeHead, addObstacle]);
 
   useEffect(() => {
     const directionInterval = setInterval(() => {
@@ -113,22 +180,41 @@ export default function Home() {
             left: rabbitPos.x, // säkerställ att den är inom containern
           }}
         >
-          {" "}
-          🐇{" "}
+          🐇
         </div>
+        {gameover && (
+          <div
+            className={`text-4xl mb-10 ${pixelFont.className} absolute top-40 text-shadow-lg animate-bounce`}
+          >
+            GAMEOVER
+          </div>
+        )}
+        {addObstacle.map((item, index) => {
+          return (
+            <div
+              key={index}
+              className="w-[30px] h-[30px]  bg-red-400 absolute"
+              style={{
+                top: item.y,
+                left: item.x,
+              }}
+            ></div>
+          );
+        })}
         {isPlaying ? (
           <div
-            className="w-[20px] h-[20px] bg-green-400 absolute"
+            className="w-[20px] h-[20px]  bg-green-400 absolute transition ease-in"
             style={{
-              top: `${Math.max(0, Math.min(position.y, 565))}px`, // går inte utanför containern
-              left: `${Math.max(0, Math.min(position.x, 565))}px`, // går inte utanför containern
+              top: `${Math.max(0, Math.min(snakeHead.y, 565))}px`, // går inte utanför containern
+              left: `${Math.max(0, Math.min(snakeHead.x, 565))}px`, // går inte utanför containern
             }}
           ></div>
         ) : (
           <button
             onClick={() => {
-              setPosition({ y: 300, x: 300 });
+              setSnakeHead({y: 300, x: 300});
               setIsPlaying(true);
+              setGameOver(false);
             }}
             className="bg-green-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all"
           >
@@ -136,49 +222,7 @@ export default function Home() {
           </button>
         )}
       </div>
-      <p className={`text-1xl mb-10 ${pixelFont.className}`}>Score: 0</p>
+      <p className={`text-1xl mb-10 ${pixelFont.className}`}>Score: {score}</p>
     </div>
   );
 }
-
-// const spriteRect = currentCharacter.getBoundingClientRect();
-//   const obstacleRect = sprite.getBoundingClientRect();
-
-//   // Check if there’s an overlap.
-//   if (
-//     spriteRect.left < obstacleRect.right &&
-//     spriteRect.right > obstacleRect.left &&
-//     spriteRect.top < obstacleRect.bottom &&
-//     spriteRect.bottom > obstacleRect.top
-//   ) {
-
-// Funtion som tar hand om riktningen
-
-// function HandleAutoDirection() {
-//   setPosition((prev) => {
-//     let newPosition = {...prev};
-
-//     switch (direction) {
-//       case "down-direction":
-//         newPosition.y = prev.y + speed;
-//         break;
-//       case "up-direction":
-//         newPosition.y = prev.y - speed;
-//         break;
-//       case "right-direction":
-//         newPosition.x = prev.x + speed;
-//         break;
-//       case "left-direction":
-//         newPosition.x = prev.x - speed;
-//         break;
-//       default:
-//         break;
-//     }
-
-//     // Se till att den gröna div-en inte går utanför containern
-//     newPosition.x = Math.max(0, Math.min(newPosition.x, 565)); // Max 580px för att hålla den inom 600px containeren
-//     newPosition.y = Math.max(0, Math.min(newPosition.y, 565)); // Max 580px för att hålla den inom 600px containeren
-
-//     return newPosition;
-//   });
-// }
