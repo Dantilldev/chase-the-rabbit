@@ -1,5 +1,5 @@
-import {useState, useEffect} from "react";
-import {Press_Start_2P} from "next/font/google";
+import { useState, useEffect } from "react";
+import { Press_Start_2P } from "next/font/google";
 
 //  Todos😀
 // 1.
@@ -19,16 +19,28 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Home() {
-  const [snakeHead, setSnakeHead] = useState({x: 0, y: 0}); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({ x: 0, y: 0 }); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
   const [score, setScore] = useState(0);
   const [rabbitPos, setRabbitPos] = useState({}); // Postion för Rabbit
   const [gameover, setGameOver] = useState(false);
-  const [obstacle, setObstacle] = useState({x: 0, y: 0});
+  const [obstacle, setObstacle] = useState({ x: 0, y: 0 });
   const [addObstacle, setAddObstacle] = useState([]);
   const [finalScore, setfinalScore] = useState(0);
+  const [scoreSound, setScoreSound] = useState(null);
+
+  useEffect(() => {
+    setScoreSound(new Audio("/collect-points-190037.mp3")); // Ensure this runs only on the client
+  }, []);
+
+  function playScoreSound() {
+    if (scoreSound) {
+      scoreSound.currentTime = 0;
+      scoreSound.play();
+    }
+  }
 
   useEffect(() => {
     setRabbitPos({
@@ -41,13 +53,13 @@ export default function Home() {
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
+        return setSnakeHead((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
       case "up-direction":
-        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
+        return setSnakeHead((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
       case "right-direction":
-        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
+        return setSnakeHead((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
       case "left-direction":
-        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
+        return setSnakeHead((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
       default:
         return;
     }
@@ -126,8 +138,8 @@ export default function Home() {
   function checkCollision() {
     for (let i = 0; i < addObstacle.length; i++) {
       if (
-        Math.abs(snakeHead.x - addObstacle[i].x) < 20 &&
-        Math.abs(snakeHead.y - addObstacle[i].y) < 20
+        Math.abs(snakeHead.x - addObstacle[i].x) < 27 &&
+        Math.abs(snakeHead.y - addObstacle[i].y) < 27
       ) {
         setSpeed(10);
         setIsPlaying(false);
@@ -142,7 +154,7 @@ export default function Home() {
   function HandleAddObstacle() {
     setAddObstacle([
       ...addObstacle,
-      {x: Math.random() * 530, y: Math.random() * 530},
+      { x: Math.random() * 530, y: Math.random() * 530 },
     ]);
   }
 
@@ -158,6 +170,7 @@ export default function Home() {
         console.log("SCORE update", newScore);
         return newScore;
       });
+      playScoreSound();
       HandleAddObstacle();
       checkCollision();
     } else if (
@@ -210,7 +223,7 @@ export default function Home() {
   }
 
   function restartGame() {
-    setSnakeHead({y: 300, x: 300});
+    setSnakeHead({ y: 300, x: 300 });
     setIsPlaying(true);
     setGameOver(false);
     setScore(0);
@@ -221,7 +234,7 @@ export default function Home() {
   return (
     <div
       className="flex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center"
-      style={{backgroundImage: "url('/bg-image.jpg')"}}
+      style={{ backgroundImage: "url('/bg-image.jpg')" }}
     >
       <h1 className={`text-4xl mb-12 ${pixelFont.className} text-white`}>
         Snake Game
