@@ -1,6 +1,7 @@
-import {useState, useEffect} from "react";
-import {Press_Start_2P} from "next/font/google";
+import { useState, useEffect } from "react";
+import { Press_Start_2P } from "next/font/google";
 import MusicPlayer from "./components/musicPlayer";
+import { ImPacman } from "react-icons/im";
 
 //  Todos😀
 // 1.
@@ -19,7 +20,7 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Game() {
-  const [snakeHead, setSnakeHead] = useState({x: 240, y: 240}); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({ x: 240, y: 240 }); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
@@ -29,6 +30,7 @@ export default function Game() {
   const [addObstacle, setAddObstacle] = useState([]);
   const [finalScore, setfinalScore] = useState(0);
   const [scoreSound, setScoreSound] = useState(null);
+  const [highscore, setHighscore] = useState(0);
 
   const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
   const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
@@ -42,8 +44,11 @@ export default function Game() {
     if (score > savedScore) {
       localStorage.setItem("highscore", score);
     }
-    // setfinalScore(savedScore);
   }
+
+  useEffect(() => {
+    setHighscore(localStorage.getItem("highscore"));
+  }, []);
 
   useEffect(() => {
     setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
@@ -68,13 +73,13 @@ export default function Game() {
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
+        return setSnakeHead((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
       case "up-direction":
-        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
+        return setSnakeHead((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
       case "right-direction":
-        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
+        return setSnakeHead((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
       case "left-direction":
-        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
+        return setSnakeHead((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
       default:
         return;
     }
@@ -150,7 +155,7 @@ export default function Game() {
   function HandleAddObstacle() {
     setAddObstacle([
       ...addObstacle,
-      {x: getOddRandom(565), y: getOddRandom(565)},
+      { x: getOddRandom(565), y: getOddRandom(565) },
     ]);
   }
 
@@ -224,7 +229,7 @@ export default function Game() {
   }
 
   function restartGame() {
-    setSnakeHead({y: 300, x: 300});
+    setSnakeHead({ y: 300, x: 300 });
     setIsPlaying(true);
     setGameOver(false);
     setScore(0);
@@ -235,11 +240,15 @@ export default function Game() {
   return (
     <div
       className="flex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center"
-      style={{backgroundImage: "url('/bg-imageV2.jpg')"}}
+      style={{ backgroundImage: "url('/bg-imageV2.jpg')" }}
     >
       <h1 className={`text-4xl mb-12 ${pixelFont.className} text-white`}>
         Snake Game
       </h1>
+      <p className={`${pixelFont.className} text-white right-0 absolute top-0`}>
+        {" "}
+        highscore: {highscore}
+      </p>
       <div className="absolute top-42 right-22 ">
         <MusicPlayer />
       </div>
