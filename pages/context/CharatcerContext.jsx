@@ -6,10 +6,7 @@ export function CharacterContextProvider({ children }) {
   const [character, setCharacter] = useState("");
 
   return (
-    <CharacterContext.Provider value={{}}>
-      {" "}
-      {children}{" "}
-    </CharacterContext.Provider>
+    <CharacterContext.Provider value={{}}>{children}</CharacterContext.Provider>
   );
 }
 

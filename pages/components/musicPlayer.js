@@ -1,18 +1,30 @@
-import {useState, useRef} from "react";
-import {FaVolumeUp, FaVolumeMute} from "react-icons/fa";
+import { useState, useRef } from "react";
+import { FaVolumeUp, FaVolumeMute } from "react-icons/fa";
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null); // Referens till audio
+
+  // Referens till audio
+  const audioRef = useRef(null);
+
+  function volume() {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.05;
+    }
+  }
 
   // Togglar play/pause
   function togglePlay() {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
+    if (audioRef.current) {
+      volume();
+
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
-    setIsPlaying(!isPlaying);
   }
 
   return (

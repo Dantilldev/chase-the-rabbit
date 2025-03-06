@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Press_Start_2P } from "next/font/google";
 import MusicPlayer from "./components/musicPlayer";
-import { ImPacman } from "react-icons/im";
+import Link from "next/link";
 
 //  Todos😀
 // 1.
 // 2.
-// 3. Bakgrundmuisk med mute knapp
+
 // 5. Deisgna första sidan: spelinstriktioner, start game, highscore
-// 6. Localstorage med highscore function
 // 8.  så att kaninen inte kan spawna på ett hinder, samt ändra hastigheten
+
 // 9. Fixa gameover text börjar synas även ifall man ej spelat en omgång
 
 // Pixel fontFixa
@@ -136,6 +136,8 @@ export default function Game() {
 
   // checkar om ormen krockar med Obsatcles
   function checkCollision() {
+    if (!isPlaying) return;
+
     for (let i = 0; i < addObstacle.length; i++) {
       if (
         Math.abs(snakeHead.x - addObstacle[i].x) < 23 &&
@@ -184,12 +186,14 @@ export default function Game() {
       snakeHead.x < -5 ||
       snakeHead.y < -5
     ) {
-      setHighScore();
-      setfinalScore(score);
-      setAddObstacle([]);
-      setIsPlaying(false);
-      setSpeed(10);
-      setGameOver(true);
+      if (isPlaying) {
+        setHighScore();
+        setfinalScore(score);
+        setAddObstacle([]);
+        setIsPlaying(false);
+        setSpeed(10);
+        setGameOver(true);
+      }
     }
   }
 
@@ -245,19 +249,23 @@ export default function Game() {
       <h1 className={`text-4xl mb-12 ${pixelFont.className} text-white`}>
         Snake Game
       </h1>
-      <p className={`${pixelFont.className} text-white right-0 absolute top-0`}>
-        {" "}
-        highscore: {highscore}
-      </p>
-      <div className="absolute top-42 right-22 ">
-        <MusicPlayer />
-      </div>
 
       <div className="flex justify-center items-center w-[600px] h-[600px] relative border-8 border-white">
-        <div className="absolute top-[-30px] left-0">
+        <div className="absolute top-[-30px] left-[-8px]">
           <p className={`text-1xl ${pixelFont.className} text-white`}>
             Score: {score}
           </p>{" "}
+        </div>
+        <div className="absolute top-[50px] right-[-20px]">
+          <span className="absolute top-0">
+            <MusicPlayer />
+          </span>
+        </div>
+        <div className="absolute top-[-30px] right-[-8px]">
+          <p className={`${pixelFont.className} text-white`}>
+            {" "}
+            highscore: {highscore}{" "}
+          </p>
         </div>
 
         <div
@@ -317,12 +325,19 @@ export default function Game() {
             />
           </div>
         ) : (
-          <button
-            onClick={restartGame}
-            className="bg-green-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all"
-          >
-            Start Game
-          </button>
+          <div className="flex flex-row gap-6 mt-10">
+            <button
+              onClick={restartGame}
+              className="bg-green-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all"
+            >
+              Start Game
+            </button>
+            <Link href="/">
+              <button className="bg-blue-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all">
+                Back Home
+              </button>
+            </Link>
+          </div>
         )}
       </div>
     </div>
