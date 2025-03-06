@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
-import { Press_Start_2P } from "next/font/google";
+import {useState, useEffect} from "react";
+import {Press_Start_2P} from "next/font/google";
 
 //  Todos😀
 // 1.
 // 2.
 // 3. Bakgrundmuisk med mute knapp
-// 4. Ljud effekt för varje gång den käkar en kanin(poäng), gameover,start game,
 // 5. Deisgna första sidan: spelinstriktioner, start game, highscore
 // 6. Localstorage med highscore function
-// 7. Fixa score så att det syns hur mycket man fått
-// 8. Fixa så att kaninen inte kan spawna på ett hinder samt ändra hastigheten
+// 8.  så att kaninen inte kan spawna på ett hinder, samt ändra hastigheten
+// 9. Fixa gameover text börjar synas även ifall man ej spelat en omgång
 
-// Pixel font
+// Pixel fontFixa
 const pixelFont = Press_Start_2P({
   weight: "400",
   subsets: ["latin"],
@@ -19,20 +18,34 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Home() {
-  const [snakeHead, setSnakeHead] = useState({ x: 0, y: 0 }); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({x: 240, y: 240}); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
-  const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
+  const [isPlaying, setIsPlaying] = useState(true); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
   const [score, setScore] = useState(0);
   const [rabbitPos, setRabbitPos] = useState({}); // Postion för Rabbit
   const [gameover, setGameOver] = useState(false);
-  const [obstacle, setObstacle] = useState({ x: 0, y: 0 });
   const [addObstacle, setAddObstacle] = useState([]);
   const [finalScore, setfinalScore] = useState(0);
   const [scoreSound, setScoreSound] = useState(null);
 
+  const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
+  const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
+
+  function setHighScore() {
+    if (localStorage.getItem("highscore") === null) {
+      localStorage.setItem("highscore", 0);
+    }
+
+    const savedScore = localStorage.getItem("highscore");
+    if (score > savedScore) {
+      localStorage.setItem("highscore", score);
+    }
+    // setfinalScore(savedScore);
+  }
+
   useEffect(() => {
-    setScoreSound(new Audio("/collect-points-190037.mp3")); // Ensure this runs only on the client
+    setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
   }, []);
 
   function playScoreSound() {
@@ -42,10 +55,11 @@ export default function Home() {
     }
   }
 
+  // Kaninen är alltid jämna tal
   useEffect(() => {
     setRabbitPos({
-      x: Math.floor(Math.random() * 565),
-      y: Math.floor(Math.random() * 565),
+      x: getEvenRandom(565),
+      y: getEvenRandom(565),
     });
   }, []);
 
@@ -53,13 +67,13 @@ export default function Home() {
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
+        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
       case "up-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
+        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
       case "right-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
+        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
       case "left-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
+        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
       default:
         return;
     }
@@ -101,51 +115,32 @@ export default function Home() {
 
   // Uppdaterar hastigheten
   function updateSpeed() {
-    if (score >= 8 && score <= 12) {
+    if (score >= 0 && score < 4) {
+      setSpeed(10);
+    } else if (score >= 4 && score <= 8) {
       setSpeed(12);
-    } else if (score > 12 && score <= 17) {
+    } else if (score > 8 && score <= 13) {
       setSpeed(15);
-    } else if (score > 17 && score < 35) {
+    } else if (score > 13 && score < 35) {
       setSpeed(18);
+    } else {
+      setSpeed(20);
     }
-  }
-
-  // Kollar om den nya positionen är säker
-  // Används för att kolla ifall den kolliderar
-  function generateRabbitPosition() {
-    let newPos;
-    let safe = false;
-
-    while (!safe) {
-      newPos = {
-        x: Math.floor(Math.random() * 565),
-        y: Math.floor(Math.random() * 565),
-      };
-
-      // Check if the new position is inside an obstacle
-
-      safe = !addObstacle.some(
-        (obstacle) =>
-          Math.abs(newPos.x - obstacle.x) < 20 &&
-          Math.abs(newPos.y - obstacle.y) < 20
-      );
-    }
-
-    setRabbitPos(newPos);
   }
 
   // checkar om ormen krockar med Obsatcles
   function checkCollision() {
     for (let i = 0; i < addObstacle.length; i++) {
       if (
-        Math.abs(snakeHead.x - addObstacle[i].x) < 27 &&
-        Math.abs(snakeHead.y - addObstacle[i].y) < 27
+        Math.abs(snakeHead.x - addObstacle[i].x) < 23 &&
+        Math.abs(snakeHead.y - addObstacle[i].y) < 23
       ) {
         setSpeed(10);
         setIsPlaying(false);
         setAddObstacle([]);
-        setScore(0);
         setGameOver(true);
+        setfinalScore(score);
+        setHighScore();
         break;
       }
     }
@@ -154,7 +149,7 @@ export default function Home() {
   function HandleAddObstacle() {
     setAddObstacle([
       ...addObstacle,
-      { x: Math.random() * 530, y: Math.random() * 530 },
+      {x: getOddRandom(565), y: getOddRandom(565)},
     ]);
   }
 
@@ -164,12 +159,16 @@ export default function Home() {
       Math.abs(snakeHead.x - rabbitPos.x) < 25 &&
       Math.abs(snakeHead.y - rabbitPos.y) < 25
     ) {
-      generateRabbitPosition();
+      // generateRabbitPosition();
       setScore((prev) => {
         const newScore = prev + 1;
-        console.log("SCORE update", newScore);
         return newScore;
       });
+      setRabbitPos({
+        x: getEvenRandom(565),
+        y: getEvenRandom(565),
+      });
+
       playScoreSound();
       HandleAddObstacle();
       checkCollision();
@@ -179,6 +178,7 @@ export default function Home() {
       snakeHead.x < -5 ||
       snakeHead.y < -5
     ) {
+      setHighScore();
       setfinalScore(score);
       setAddObstacle([]);
       setIsPlaying(false);
@@ -223,7 +223,7 @@ export default function Home() {
   }
 
   function restartGame() {
-    setSnakeHead({ y: 300, x: 300 });
+    setSnakeHead({y: 300, x: 300});
     setIsPlaying(true);
     setGameOver(false);
     setScore(0);
@@ -234,7 +234,7 @@ export default function Home() {
   return (
     <div
       className="flex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center"
-      style={{ backgroundImage: "url('/bg-image.jpg')" }}
+      style={{backgroundImage: "url('/bg-imageV2.jpg')"}}
     >
       <h1 className={`text-4xl mb-12 ${pixelFont.className} text-white`}>
         Snake Game
@@ -272,7 +272,7 @@ export default function Home() {
           return (
             <div
               key={index}
-              className={`w-[30px] h-[30px] bg-orange-400 absolute  `}
+              className={`w-[25px] h-[25px] bg-orange-400 absolute  `}
               style={{
                 top: item.y,
                 left: item.x,
@@ -287,7 +287,22 @@ export default function Home() {
               top: `${Math.max(0, Math.min(snakeHead.y, 565))}px`, // går inte utanför containern
               left: `${Math.max(0, Math.min(snakeHead.x, 565))}px`, // går inte utanför containern
             }}
-          ></div>
+          >
+            <div className="bg-red-500 w-[2px] h-[6px] bottom-0 left-0 absolute"></div>
+            <div className="bg-red-500 w-[2px] h-[6px] top-0 left-0 absolute"></div>
+
+            {/* Mouth */}
+            <div
+              className="absolute bottom-2 left-2 bg-transparent"
+              style={{
+                width: "16px",
+                height: "8px",
+                borderTop: "2px solid red", // Mouth border
+                borderRadius: "0 0 8px 8px", // Make it look like a smiling mouth
+                transform: "rotate(180deg)", // Flip the mouth to face downwards
+              }}
+            />
+          </div>
         ) : (
           <button
             onClick={restartGame}
