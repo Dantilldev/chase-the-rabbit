@@ -1,34 +1,44 @@
 import Link from "next/link";
-import CharacterMenu from "./components/characterMenu"; // Import the CharacterMenu component
+import Footer from "./components/Footer";
+import Button from "./components/Button";
+import HowToPlay from "./components/HowToPlay";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 
 export default function Home() {
   const [showCharacters, setShowCharacters] = useState(false);
+  const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(false);
 
   return (
-    <div
-      className="lex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center "
-      style={{ backgroundImage: "url('/bg-imageV2.jpg')" }}
-    >
-      {/* <Game /> */}
-      <div className="h-[600px] w-full flex flex-col justify-center items-center">
-        <div className="flex gap-4">
-          <Link href="/game">
-            <button className="bg-blue-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-105 duration-150 ease-in transition-all w-32">
-              {" "}
-              play Game
-            </button>
-          </Link>
-          <button
-            onClick={() => setShowCharacters(!showCharacters)}
-            className="bg-orange-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-105 duration-150 ease-in transition-all w-32"
-          >
-            {" "}
-            Charaters{" "}
-          </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 overflow-hidden font-sans">
+      {" "}
+      <div className="relative h-24 w-96 mb-10">
+        <div className="absolute w-20 h-20 bg-red-500 left-24 top-2 animate-box"></div>
+        <div className=" right-24 top-4 animate-rabbit after:content-[''] text-7xl z-20">
+          {" "}
+          🐇
+        </div>{" "}
+      </div>
+      <h1
+        className="text-5xl font-bold text-gray-100 mb-8 shadow-lg"
+        style={{ textShadow: "3px 3px 0px #16a085" }}
+      >
+        Rabbit Chase
+      </h1>
+      <div className="flex flex-wrap justify-center gap-5">
+        <Button href="/game" text="PLAY" />
+
+        <Button
+          href="#"
+          text="HOW TO PLAY"
+          onClick={() => setIsHowToPlayOpen(true)}
+        />
+        <Button href="/charactersPage" text="CHARACTERS" />
+        <div className="fixed jusify-center item-center">
+          {isHowToPlayOpen && (
+            <HowToPlay onClose={() => setIsHowToPlayOpen(false)} />
+          )}
         </div>
-        {showCharacters && <CharacterMenu />}
       </div>
     </div>
   );

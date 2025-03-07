@@ -1,16 +1,15 @@
-import { useState, useEffect } from "react";
-import { Press_Start_2P } from "next/font/google";
-import MusicPlayer from "./components/musicPlayer";
 import Link from "next/link";
+import { Press_Start_2P } from "next/font/google";
+import MusicPlayer from "./components/MusicPlayer";
+import { useState, useEffect, useContext } from "react";
+import Button from "./components/Button";
+import CoinContext from "./context/CoinContext";
+import { ImCoinDollar } from "react-icons/im";
 
 //  Todos😀
-// 1.
-// 2.
-
-// 5. Deisgna första sidan: spelinstriktioner, start game, highscore
-// 8.  så att kaninen inte kan spawna på ett hinder, samt ändra hastigheten
-
-// 9. Fixa gameover text börjar synas även ifall man ej spelat en omgång
+// 1. Fixa en coins system så att man kan kollektera coins
+// 2. Byta karaktärer
+// 3.
 
 // Pixel fontFixa
 const pixelFont = Press_Start_2P({
@@ -30,10 +29,15 @@ export default function Game() {
   const [addObstacle, setAddObstacle] = useState([]);
   const [finalScore, setfinalScore] = useState(0);
   const [scoreSound, setScoreSound] = useState(null);
+  const [gameOverSound, setGameOverSound] = useState(null);
   const [highscore, setHighscore] = useState(0);
+
+  const { coins, setCoins } = useContext(CoinContext);
 
   const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
   const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
+
+  // Spara coins i localstorage och uppdatera coins
 
   function setHighScore() {
     if (localStorage.getItem("highscore") === null) {
@@ -52,12 +56,20 @@ export default function Game() {
 
   useEffect(() => {
     setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
+    setGameOverSound(new Audio("/game-over-arcade-6435.mp3")); // Se till så att det bara skrivs
   }, []);
 
   function playScoreSound() {
     if (scoreSound) {
       scoreSound.currentTime = 0;
       scoreSound.play();
+    }
+  }
+
+  function playGameOverSound() {
+    if (gameOverSound) {
+      gameOverSound.currentTime = 0;
+      gameOverSound.play();
     }
   }
 
@@ -143,6 +155,7 @@ export default function Game() {
         Math.abs(snakeHead.x - addObstacle[i].x) < 23 &&
         Math.abs(snakeHead.y - addObstacle[i].y) < 23
       ) {
+        playGameOverSound();
         setSpeed(10);
         setIsPlaying(false);
         setAddObstacle([]);
@@ -187,6 +200,7 @@ export default function Game() {
       snakeHead.y < -5
     ) {
       if (isPlaying) {
+        playGameOverSound();
         setHighScore();
         setfinalScore(score);
         setAddObstacle([]);
@@ -243,8 +257,8 @@ export default function Game() {
 
   return (
     <div
-      className="flex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center"
-      style={{ backgroundImage: "url('/bg-imageV2.jpg')" }}
+      className="flex flex-col justify-center items-center min-h-screen w-full bg-cover bg-center bg-slate-800"
+      // style={{ backgroundImage: "url('/bg-imageV2.jpg')" }}
     >
       <h1 className={`text-4xl mb-12 ${pixelFont.className} text-white`}>
         Snake Game
@@ -293,7 +307,7 @@ export default function Game() {
           return (
             <div
               key={index}
-              className={`w-[25px] h-[25px] bg-orange-400 absolute  `}
+              className={`w-[25px] h-[25px] bg-orange-500 text-4xl absolute `}
               style={{
                 top: item.y,
                 left: item.x,
@@ -326,17 +340,8 @@ export default function Game() {
           </div>
         ) : (
           <div className="flex flex-row gap-6 mt-10">
-            <button
-              onClick={restartGame}
-              className="bg-green-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all"
-            >
-              Start Game
-            </button>
-            <Link href="/">
-              <button className="bg-blue-500 rounded-xl text-center p-2 text-white font-bold cursor-pointer hover:scale-120 duration-150 ease-in transition-all">
-                Back Home
-              </button>
-            </Link>
+            <Button href="#" text="Start Game" onClick={restartGame} />
+            <Button href="/" text="Back Home" />
           </div>
         )}
       </div>
