@@ -3,7 +3,7 @@ import Footer from "./components/Footer";
 import Button from "./components/Button";
 import HowToPlay from "./components/HowToPlay";
 
-import { useState, useContext, useEffect } from "react";
+import {useState, useContext, useEffect} from "react";
 
 export default function Home() {
   const [showCharacters, setShowCharacters] = useState(false);
@@ -21,7 +21,7 @@ export default function Home() {
       </div>
       <h1
         className="text-5xl font-bold text-gray-100 mb-8 shadow-lg"
-        style={{ textShadow: "3px 3px 0px #16a085" }}
+        style={{textShadow: "3px 3px 0px #16a085"}}
       >
         Rabbit Chase
       </h1>

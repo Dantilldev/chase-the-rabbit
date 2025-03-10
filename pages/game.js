@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Press_Start_2P } from "next/font/google";
+import {Press_Start_2P} from "next/font/google";
 import MusicPlayer from "./components/MusicPlayer";
-import { useState, useEffect, useContext } from "react";
+import {useState, useEffect, useContext} from "react";
 import Button from "./components/Button";
 import CoinContext from "./context/CoinContext";
-import { ImCoinDollar } from "react-icons/im";
+import {ImCoinDollar} from "react-icons/im";
 
 //  Todos😀
 // 1. Fixa en coins system så att man kan kollektera coins
@@ -19,7 +19,7 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Game() {
-  const [snakeHead, setSnakeHead] = useState({ x: 240, y: 240 }); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({x: 240, y: 240}); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
@@ -30,14 +30,68 @@ export default function Game() {
   const [finalScore, setfinalScore] = useState(0);
   const [scoreSound, setScoreSound] = useState(null);
   const [gameOverSound, setGameOverSound] = useState(null);
-  const [highscore, setHighscore] = useState(0);
+  const [highscore, setHighcore] = useState();
 
-  const { coins, setCoins } = useContext(CoinContext);
+  const {coins, setCoins} = useContext(CoinContext);
 
   const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
   const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
 
+  // USEEFFECT
+
+  useEffect(() => {
+    setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
+    setGameOverSound(new Audio("/game-over-arcade-6435.mp3")); // Se till så att det bara skrivs
+  }, []);
+
+  useEffect(() => {
+    eatRabbit();
+    updateSpeed(speed);
+  }, [snakeHead]);
+
+  useEffect(() => {
+    checkCollision();
+  }, [snakeHead, addObstacle]);
+
+  useEffect(() => {
+    const directionInterval = setInterval(() => {
+      HandleAutoDirection();
+    }, 100);
+
+    return () => clearInterval(directionInterval);
+  }, [direction]);
+
+  // Lyssnar på Keydown
+  useEffect(() => {
+    window.removeEventListener("keydown", handleDirection);
+    window.addEventListener("keydown", handleDirection);
+  }, []);
+
+  // ++++++++
+  useEffect(() => {
+    // Läs från localStorage vid start
+    const savedHighscore = Number(localStorage.getItem("highscore")) || 0;
+    setHighcore(savedHighscore);
+  }, []);
+
+  useEffect(() => {
+    // Uppdatera highscore när spelet är över
+    if (gameover) {
+      if (score > highscore) {
+        localStorage.setItem("highscore", score); // Uppdaterar highscore i localStorage
+        setHighcore(score); // Uppdaterar state för highscore
+      }
+    }
+  }, [gameover, score, highscore]); // Lyssnar på förändringar i score och gameover
+
   // Spara coins i localstorage och uppdatera coins
+  function getCoins() {
+    let currentCoins = Number(localStorage.getItem("coins"));
+    console.log("Current coins: ", currentCoins);
+    let coinsFromGame = score;
+
+    localStorage.setItem("coins", currentCoins + coinsFromGame);
+  }
 
   function setHighScore() {
     if (localStorage.getItem("highscore") === null) {
@@ -49,15 +103,6 @@ export default function Game() {
       localStorage.setItem("highscore", score);
     }
   }
-
-  useEffect(() => {
-    setHighscore(localStorage.getItem("highscore"));
-  }, []);
-
-  useEffect(() => {
-    setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
-    setGameOverSound(new Audio("/game-over-arcade-6435.mp3")); // Se till så att det bara skrivs
-  }, []);
 
   function playScoreSound() {
     if (scoreSound) {
@@ -85,13 +130,13 @@ export default function Game() {
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
+        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
       case "up-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
+        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
       case "right-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
+        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
       case "left-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
+        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
       default:
         return;
     }
@@ -156,11 +201,11 @@ export default function Game() {
         Math.abs(snakeHead.y - addObstacle[i].y) < 23
       ) {
         playGameOverSound();
+        setfinalScore(score);
         setSpeed(10);
         setIsPlaying(false);
         setAddObstacle([]);
         setGameOver(true);
-        setfinalScore(score);
         setHighScore();
         break;
       }
@@ -170,7 +215,7 @@ export default function Game() {
   function HandleAddObstacle() {
     setAddObstacle([
       ...addObstacle,
-      { x: getOddRandom(565), y: getOddRandom(565) },
+      {x: getOddRandom(565), y: getOddRandom(565)},
     ]);
   }
 
@@ -201,8 +246,8 @@ export default function Game() {
     ) {
       if (isPlaying) {
         playGameOverSound();
-        setHighScore();
         setfinalScore(score);
+        setHighScore();
         setAddObstacle([]);
         setIsPlaying(false);
         setSpeed(10);
@@ -210,29 +255,6 @@ export default function Game() {
       }
     }
   }
-
-  useEffect(() => {
-    eatRabbit();
-    updateSpeed(speed);
-  }, [snakeHead]);
-
-  useEffect(() => {
-    checkCollision();
-  }, [snakeHead, addObstacle]);
-
-  useEffect(() => {
-    const directionInterval = setInterval(() => {
-      HandleAutoDirection();
-    }, 100);
-
-    return () => clearInterval(directionInterval);
-  }, [direction]);
-
-  // Lyssnar på Keydown
-  useEffect(() => {
-    window.removeEventListener("keydown", handleDirection);
-    window.addEventListener("keydown", handleDirection);
-  }, []);
 
   function changeDireaction() {
     if (direction === "down-direction") {
@@ -247,7 +269,7 @@ export default function Game() {
   }
 
   function restartGame() {
-    setSnakeHead({ y: 300, x: 300 });
+    setSnakeHead({y: 300, x: 300});
     setIsPlaying(true);
     setGameOver(false);
     setScore(0);
@@ -278,7 +300,7 @@ export default function Game() {
         <div className="absolute top-[-30px] right-[-8px]">
           <p className={`${pixelFont.className} text-white`}>
             {" "}
-            highscore: {highscore}{" "}
+            highscore: {highscore}
           </p>
         </div>
 

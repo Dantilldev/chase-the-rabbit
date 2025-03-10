@@ -1,17 +1,17 @@
-import { FaArrowDown } from "react-icons/fa";
-import { ImCoinDollar } from "react-icons/im";
+import {FaArrowDown} from "react-icons/fa";
+import {ImCoinDollar} from "react-icons/im";
 
 import Button from "./components/Button";
 import Character1 from "./components/Charater1";
 import Character2 from "./components/Character2";
 import Character3 from "./components/Character3";
 
-import { FaQuestion } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import {FaQuestion} from "react-icons/fa";
+import {useState, useEffect} from "react";
 
 export default function CharactersPage() {
   return (
-    <div className="min-h-screen bg-slate-800 w-full items-center justify-center flex flex-col p-2">
+    <div className="bg-slate-800 w-full items-center justify-center flex flex-col p-2 min-h-screen">
       <div className="absolute top-10 left-0 p-2">
         <Button href="/" text="Back" />
       </div>
@@ -21,7 +21,7 @@ export default function CharactersPage() {
         Characters
         <FaArrowDown />
       </h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12 ">
         <Character1 name="Drake Slayer" cost="Free" />
 
         <Character2 name="Rabbit Slayer" cost="200" />
