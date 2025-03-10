@@ -5,11 +5,15 @@ import {useState, useEffect, useContext} from "react";
 import Button from "./components/Button";
 import CoinContext from "./context/CoinContext";
 import {ImCoinDollar} from "react-icons/im";
+import CharacterContext from "./context/CharatcerContext";
+import Character2 from "./components/Character2";
+import Character1 from "./components/Charater1";
+import Character3 from "./components/Character3";
 
-//  Todos😀
-// 1. Fixa en coins system så att man kan kollektera coins
-// 2. Byta karaktärer
-// 3.
+//  Todos :)
+// 1. Att man ser om vilka karatärer man har köpt
+// 2. köpa och byta charactär
+// 3. Fixa props för karaktärs sidan
 
 // Pixel fontFixa
 const pixelFont = Press_Start_2P({
@@ -32,13 +36,14 @@ export default function Game() {
   const [gameOverSound, setGameOverSound] = useState(null);
   const [highscore, setHighcore] = useState();
 
+  // f
   const {coins, setCoins} = useContext(CoinContext);
+  const {character, setCharacter} = useContext(CharacterContext);
 
   const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
   const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
 
   // USEEFFECT
-
   useEffect(() => {
     setScoreSound(new Audio("/collect-points-190037.mp3")); // Se till så att det bara skrivs
     setGameOverSound(new Audio("/game-over-arcade-6435.mp3")); // Se till så att det bara skrivs
@@ -47,9 +52,6 @@ export default function Game() {
   useEffect(() => {
     eatRabbit();
     updateSpeed(speed);
-  }, [snakeHead]);
-
-  useEffect(() => {
     checkCollision();
   }, [snakeHead, addObstacle]);
 
@@ -57,7 +59,6 @@ export default function Game() {
     const directionInterval = setInterval(() => {
       HandleAutoDirection();
     }, 100);
-
     return () => clearInterval(directionInterval);
   }, [direction]);
 
@@ -67,20 +68,17 @@ export default function Game() {
     window.addEventListener("keydown", handleDirection);
   }, []);
 
-  // ++++++++
   useEffect(() => {
-    // Läs från localStorage vid start
     const savedHighscore = Number(localStorage.getItem("highscore")) || 0;
     setHighcore(savedHighscore);
-  }, []);
-
-  useEffect(() => {
     // Uppdatera highscore när spelet är över
     if (gameover) {
       if (score > highscore) {
         localStorage.setItem("highscore", score); // Uppdaterar highscore i localStorage
         setHighcore(score); // Uppdaterar state för highscore
       }
+      // För UPPDATERING AV COINS VARJE GÅNG MAN DÖR
+      getCoins();
     }
   }, [gameover, score, highscore]); // Lyssnar på förändringar i score och gameover
 
@@ -90,10 +88,12 @@ export default function Game() {
     console.log("Current coins: ", currentCoins);
     let coinsFromGame = score;
 
+    // let newCoins = currentCoins + coinsFromGame;
     localStorage.setItem("coins", currentCoins + coinsFromGame);
+    setCoins(Number(localStorage.getItem("coins")));
   }
 
-  function setHighScore() {
+  function savedHighscore() {
     if (localStorage.getItem("highscore") === null) {
       localStorage.setItem("highscore", 0);
     }
@@ -206,7 +206,7 @@ export default function Game() {
         setIsPlaying(false);
         setAddObstacle([]);
         setGameOver(true);
-        setHighScore();
+        savedHighscore();
         break;
       }
     }
@@ -247,7 +247,7 @@ export default function Game() {
       if (isPlaying) {
         playGameOverSound();
         setfinalScore(score);
-        setHighScore();
+        savedHighscore();
         setAddObstacle([]);
         setIsPlaying(false);
         setSpeed(10);
@@ -268,6 +268,7 @@ export default function Game() {
     }
   }
 
+  // Restart Game
   function restartGame() {
     setSnakeHead({y: 300, x: 300});
     setIsPlaying(true);
@@ -338,27 +339,25 @@ export default function Game() {
           );
         })}
         {isPlaying ? (
-          <div
-            className={`w-[20px] h-[20px] bg-green-400 absolute ${changeDireaction()} transition-all ease-out duration-150`}
-            style={{
-              top: `${Math.max(0, Math.min(snakeHead.y, 565))}px`, // går inte utanför containern
-              left: `${Math.max(0, Math.min(snakeHead.x, 565))}px`, // går inte utanför containern
-            }}
-          >
-            <div className="bg-red-500 w-[2px] h-[6px] bottom-0 left-0 absolute"></div>
-            <div className="bg-red-500 w-[2px] h-[6px] top-0 left-0 absolute"></div>
-
-            {/* Mouth */}
-            <div
-              className="absolute bottom-2 left-2 bg-transparent"
-              style={{
-                width: "16px",
-                height: "8px",
-                borderTop: "2px solid red", // Mouth border
-                borderRadius: "0 0 8px 8px", // Make it look like a smiling mouth
-                transform: "rotate(180deg)", // Flip the mouth to face downwards
-              }}
-            />
+          <div>
+            {character === "character-1" ? (
+              <Character1
+                changeDirection={changeDireaction()}
+                snakeHead={snakeHead}
+              />
+            ) : character === "character-2" ? (
+              <Character2
+                changeDirection={changeDireaction()}
+                snakeHead={snakeHead}
+              />
+            ) : character === "character-3" ? (
+              <Character3
+                changeDirection={changeDireaction()}
+                snakeHead={snakeHead}
+              />
+            ) : (
+              console.log("didnt work")
+            )}
           </div>
         ) : (
           <div className="flex flex-row gap-6 mt-10">

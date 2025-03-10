@@ -22,12 +22,38 @@ export default function CharactersPage() {
         <FaArrowDown />
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12 ">
-        <Character1 name="Drake Slayer" cost="Free" />
+        <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
+          <Character1 />
+          <p className="text-white font-bold absolute bottom-0 left-0 p-2">
+            Drake Slayer
+          </p>
 
-        <Character2 name="Rabbit Slayer" cost="200" />
+          <p className="text-white font-bold absolute bottom-0 right-0 p-2 flex items-center gap-2">
+            Free <ImCoinDollar className="text-amber-300" />
+          </p>
+        </div>
 
-        <Character3 name="Rabbit Destroyer" cost="500" />
+        <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
+          <Character2 />
+          <p className="text-white font-bold absolute bottom-0 left-0 p-2">
+            Rabbit Slayer
+          </p>
 
+          <p className="text-white font-bold absolute bottom-0 right-0 p-2 flex items-center gap-2">
+            300 <ImCoinDollar className="text-amber-300" />
+          </p>
+        </div>
+
+        <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
+          <Character3 />
+          <p className="text-white font-bold absolute bottom-0 left-0 p-2">
+            Rabbit destroyer
+          </p>
+
+          <p className="text-white font-bold absolute bottom-0 right-0 p-2 flex items-center gap-2">
+            550 <ImCoinDollar className="text-amber-300" />
+          </p>
+        </div>
         <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
           <div
             className={`w-[20px] h-[20px] text-white absolute rounded-full transition-all ease-out duration-150 top-[100px] right-[100px]`}
