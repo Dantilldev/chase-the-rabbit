@@ -1,15 +1,16 @@
-import {FaArrowDown} from "react-icons/fa";
-import {ImCoinDollar} from "react-icons/im";
+import { FaArrowDown } from "react-icons/fa";
+import { ImCoinDollar } from "react-icons/im";
 
 import Button from "./components/Button";
 import Character1 from "./components/Charater1";
 import Character2 from "./components/Character2";
 import Character3 from "./components/Character3";
 
-import {FaQuestion} from "react-icons/fa";
-import {useState, useEffect} from "react";
+import { FaQuestion } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 export default function CharactersPage() {
+  const [snakeHead, setSnakeHead] = useState({ x: 0, y: 0 });
   return (
     <div className="bg-slate-800 w-full items-center justify-center flex flex-col p-2 min-h-screen">
       <div className="absolute top-10 left-0 p-2">
@@ -23,7 +24,7 @@ export default function CharactersPage() {
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12 ">
         <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <Character1 />
+          <Character1 snakeHead={snakeHead} />
           <p className="text-white font-bold absolute bottom-0 left-0 p-2">
             Drake Slayer
           </p>
@@ -34,7 +35,7 @@ export default function CharactersPage() {
         </div>
 
         <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <Character2 />
+          <Character2 snakeHead={snakeHead} />
           <p className="text-white font-bold absolute bottom-0 left-0 p-2">
             Rabbit Slayer
           </p>
@@ -45,7 +46,7 @@ export default function CharactersPage() {
         </div>
 
         <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <Character3 />
+          <Character3 snakeHead={snakeHead} />
           <p className="text-white font-bold absolute bottom-0 left-0 p-2">
             Rabbit destroyer
           </p>
