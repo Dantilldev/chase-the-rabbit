@@ -10,7 +10,7 @@ import { FaQuestion } from "react-icons/fa";
 import { useState, useEffect } from "react";
 
 export default function CharactersPage() {
-  const [snakeHead, setSnakeHead] = useState({ x: 0, y: 0 });
+  const [snakeHead, setSnakeHead] = useState(0);
   return (
     <div className="bg-slate-800 w-full items-center justify-center flex flex-col p-2 min-h-screen">
       <div className="absolute top-10 left-0 p-2">
