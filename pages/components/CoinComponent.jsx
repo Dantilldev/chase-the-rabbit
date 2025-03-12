@@ -10,7 +10,7 @@ export default function CoinComponent() {
   }, []);
 
   return (
-    <p className="top-0 absolute text-2xl text-white left-0 flex gap-2 items-center">
+    <p className="top-2 absolute text-2xl text-white left-2 flex gap-2 items-center">
       {coins} <ImCoinDollar className="text-amber-300" />
     </p>
   );
