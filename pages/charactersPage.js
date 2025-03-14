@@ -1,24 +1,25 @@
-import {FaArrowDown} from "react-icons/fa";
-import {FaArrowRight, FaArrowLeft} from "react-icons/fa";
+import { FaArrowDown } from "react-icons/fa";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
-import {ImCoinDollar} from "react-icons/im";
-import {FaQuestion} from "react-icons/fa";
+import { ImCoinDollar } from "react-icons/im";
+import { FaQuestion } from "react-icons/fa";
 import CharacterContext from "./context/CharatcerContext";
 import CoinContext from "./context/CoinContext";
 import Button from "./components/Button";
 import Character1 from "./components/Charater1";
 import Character2 from "./components/Character2";
 import Character3 from "./components/Character3";
+import CharacterPageBox from "./components/CharacterPageBox";
 
-import {useState, useContext, useEffect} from "react";
+import { useState, useContext, useEffect } from "react";
 
 // Todo 😎
 // Sätta tre nya localstorage en för varje karaktär, när man klickar på en karaktär och unlock == true så ska karaktären bytas till den karaktären
 
 export default function CharactersPage() {
   const [snakeHead, setSnakeHead] = useState(0);
-  const {coins, setCoins} = useContext(CoinContext);
-  const {character, setCharacter} = useContext(CharacterContext);
+  const { coins, setCoins } = useContext(CoinContext);
+  const { character, setCharacter } = useContext(CharacterContext);
   const [character2, setCharacter2] = useState(null);
   const [character3, setCharacter3] = useState(null);
 
@@ -86,129 +87,30 @@ export default function CharactersPage() {
         <FaArrowDown />
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-12">
-        <div
-          onClick={() => setCharacter("character-1")}
-          className={`bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer`}
-        >
-          <Character1 snakeHead={snakeHead} />
+        <CharacterPageBox
+          cost="Free"
+          typeOfCharacter="character-1"
+          name="Rabbit"
+        />
 
-          {character === "character-1" ? (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-              <FaArrowRight className="animate-pulse" /> Drake Slayer
-              <FaArrowLeft className="animate-pulse" />
-            </p>
-          ) : (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-              Drake Slayer
-            </p>
-          )}
+        <CharacterPageBox
+          cost="300"
+          typeOfCharacter="character-2"
+          name="Rabbit Slayer"
+          onClick={changeCharacter2}
+          character2={character2}
+        />
 
-          <p className="text-white font-bold absolute bottom-0 left-0 p-2 flex items-center gap-2">
-            Free <ImCoinDollar className="text-amber-300" />
-          </p>
-        </div>
-
-        <div
-          onClick={() => changeCharacter2()}
-          className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-        >
-          <Character2 snakeHead={snakeHead} />
-          {character === "character-2" ? (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-              <FaArrowRight className="animate-pulse" /> Rabbit slayer
-              <FaArrowLeft className="animate-pulse" />
-            </p>
-          ) : (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center">
-              {" "}
-              Rabbit Slayer
-            </p>
-          )}
-
-          <p className="text-white font-bold absolute bottom-0 flex items-center gap-2">
-            {character2 === false ? (
-              <>
-                {" "}
-                300 <ImCoinDollar className="text-amber-300" />{" "}
-              </>
-            ) : (
-              <span> Unlocked </span>
-            )}
-          </p>
-        </div>
-
-        <div
-          onClick={() => changeCharacter3()}
-          className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer"
-        >
-          <Character3 snakeHead={snakeHead} />
-          {character === "character-3" ? (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center">
-              <FaArrowRight className="animate-pulse" /> Rabbit destroyer
-              <FaArrowLeft className="animate-pulse" />
-            </p>
-          ) : (
-            <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-              {" "}
-              Rabbit destroyer{" "}
-            </p>
-          )}
-
-          <p className="text-white font-bold absolute bottom-0 left-0 p-2 flex items-center gap-2">
-            {character3 === false ? (
-              <>
-                550 <ImCoinDollar className="text-amber-300" />{" "}
-              </>
-            ) : (
-              <span> Unlocked </span>
-            )}
-          </p>
-        </div>
-        <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <div
-            className={`w-[20px] h-[20px] text-white absolute rounded-full transition-all ease-out duration-150 top-[100px] right-[100px]`}
-          >
-            <FaQuestion />
-          </div>
-
-          <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-            ???...
-          </p>
-          <p className="text-white font-bold absolute bottom-0 left-0 p-2 flex gap-2 items-center">
-            ???
-            <ImCoinDollar className="text-amber-300" />
-          </p>
-        </div>
-        <div className="bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <div
-            className={`w-[20px] h-[20px] text-white absolute rounded-full transition-all ease-out duration-150 top-[100px] right-[100px]`}
-          >
-            <FaQuestion />
-          </div>
-
-          <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-            ???...
-          </p>
-          <p className="text-white font-bold absolute bottom-0 lefts-0 p-2 flex gap-2 items-center">
-            ???
-            <ImCoinDollar className="text-amber-300" />
-          </p>
-        </div>
-        <div className="bg-slate-900 w-56 h-56 rounded-4xl shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer">
-          <div
-            className={`w-[20px] h-[20px] text-white absolute rounded-full transition-all ease-out duration-150 top-[100px] right-[100px]`}
-          >
-            <FaQuestion />
-          </div>
-
-          <p className="text-white font-bold justify-center p-2 flex gap-2 items-center ">
-            ???...
-          </p>
-          <p className="text-white font-bold absolute bottom-0 lefts-0 p-2 flex gap-2 items-center">
-            ???
-            <ImCoinDollar className="text-amber-300" />
-          </p>
-        </div>
+        <CharacterPageBox
+          cost="300"
+          typeOfCharacter="character-3"
+          name="Rabbit Destroyer"
+          onClick={changeCharacter3}
+          character3={character3}
+        />
+        <CharacterPageBox name="???..." />
+        <CharacterPageBox name="???..." />
+        <CharacterPageBox name="???..." />
       </div>
     </div>
   );
