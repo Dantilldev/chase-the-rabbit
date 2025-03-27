@@ -32,7 +32,7 @@ export default function CharacterPageBox({
             : ""
         }`
       }
-      className={`bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col justiy-center items-center place-items-center relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer`}
+      className={`bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer`}
     >
       {typeOfCharacter === "character-1" ? (
         <Character1 snakeHead={snakeHead} />
