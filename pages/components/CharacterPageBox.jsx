@@ -1,7 +1,7 @@
-import { ImCoinDollar } from "react-icons/im";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useState, useContext, useEffect } from "react";
-import { FaQuestion } from "react-icons/fa";
+import {ImCoinDollar} from "react-icons/im";
+import {FaArrowLeft, FaArrowRight} from "react-icons/fa";
+import {useState, useContext, useEffect} from "react";
+import {FaQuestion} from "react-icons/fa";
 
 import Character1 from "./Charater1";
 import Character2 from "./Character2";
@@ -18,7 +18,7 @@ export default function CharacterPageBox({
 }) {
   const [snakeHead, setSnakeHead] = useState(0);
 
-  const { character, setCharacter } = useContext(CharacterContext);
+  const {character, setCharacter} = useContext(CharacterContext);
 
   return (
     <div
@@ -32,7 +32,7 @@ export default function CharacterPageBox({
             : ""
         }`
       }
-      className={`bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer`}
+      className={`bg-slate-900 w-56 h-56 rounded-4xl p-2 shadow-2xl flex flex-col justiy-center items-center place-items-center relative hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer`}
     >
       {typeOfCharacter === "character-1" ? (
         <Character1 snakeHead={snakeHead} />

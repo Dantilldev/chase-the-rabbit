@@ -26,8 +26,8 @@ export default function Character3({snakeHead, changeDirection}) {
       className={`w-[20px] h-[20px] bg-green-400 absolute  transition-all ease-out duration-150 top-[100px] right-[100px] ${changeDirection}`}
       style={{
         backgroundColor: colors[colorIndex],
-        top: `${Math.max(0, Math.min(snakeHead.y, 565))}px`, // går inte utanför containern
-        left: `${Math.max(0, Math.min(snakeHead.x, 565))}px`, // går inte utanför containern
+        top: `${Math.max(0, Math.min(100, 565))}px`, // går inte utanför containern
+        left: `${Math.max(0, Math.min(100, 565))}px`, // går inte utanför containern
       }}
     >
       <div className="bg-red-800 w-[2px] h-[6px] bottom-0 left-0 absolute"></div>
