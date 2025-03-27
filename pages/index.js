@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Footer from "./components/Footer";
-import Button from "./components/Button";
-import HowToPlay from "./components/HowToPlay";
+import Footer from "../components/Footer";
+import Button from "../components/Button";
+import HowToPlay from "../components/HowToPlay";
 
 import {useState, useContext, useEffect} from "react";
 

@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
-import {CharacterContextProvider} from "./context/CharatcerContext";
-import {CoinContextProvider} from "./context/CoinContext";
-import CoinComponent from "./components/CoinComponent";
-import Footer from "./components/Footer";
+import {CharacterContextProvider} from "../context/CharatcerContext";
+import {CoinContextProvider} from "../context/CoinContext";
+import CoinComponent from "../components/CoinComponent";
+import Footer from "../components/Footer";
 import Head from "next/head";
 
 export default function App({Component, pageProps}) {

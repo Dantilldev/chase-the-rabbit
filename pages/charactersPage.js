@@ -1,25 +1,25 @@
-import { FaArrowDown } from "react-icons/fa";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import {FaArrowDown} from "react-icons/fa";
+import {FaArrowRight, FaArrowLeft} from "react-icons/fa";
 
-import { ImCoinDollar } from "react-icons/im";
-import { FaQuestion } from "react-icons/fa";
-import CharacterContext from "./context/CharatcerContext";
-import CoinContext from "./context/CoinContext";
-import Button from "./components/Button";
-import Character1 from "./components/Charater1";
-import Character2 from "./components/Character2";
-import Character3 from "./components/Character3";
-import CharacterPageBox from "./components/CharacterPageBox";
+import {ImCoinDollar} from "react-icons/im";
+import {FaQuestion} from "react-icons/fa";
+import CharacterContext from "../context/CharatcerContext";
+import CoinContext from "../context/CoinContext";
+import Button from "../components/Button";
+import Character1 from "../components/Charater1";
+import Character2 from "../components/Character2";
+import Character3 from "../components/Character3";
+import CharacterPageBox from "../components/CharacterPageBox";
 
-import { useState, useContext, useEffect } from "react";
+import {useState, useContext, useEffect} from "react";
 
 // Todo 😎
 // Sätta tre nya localstorage en för varje karaktär, när man klickar på en karaktär och unlock == true så ska karaktären bytas till den karaktären
 
 export default function CharactersPage() {
   const [snakeHead, setSnakeHead] = useState(0);
-  const { coins, setCoins } = useContext(CoinContext);
-  const { character, setCharacter } = useContext(CharacterContext);
+  const {coins, setCoins} = useContext(CoinContext);
+  const {character, setCharacter} = useContext(CharacterContext);
   const [character2, setCharacter2] = useState(null);
   const [character3, setCharacter3] = useState(null);
 

@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { Press_Start_2P } from "next/font/google";
-import MusicPlayer from "./components/MusicPlayer";
-import { useState, useEffect, useContext } from "react";
-import Button from "./components/Button";
-import CoinContext from "./context/CoinContext";
-import { ImCoinDollar } from "react-icons/im";
-import CharacterContext from "./context/CharatcerContext";
-import Character2 from "./components/Character2";
-import Character1 from "./components/Charater1";
-import Character3 from "./components/Character3";
+import {Press_Start_2P} from "next/font/google";
+import MusicPlayer from "../components/MusicPlayer";
+import {useState, useEffect, useContext} from "react";
+import Button from "../components/Button";
+import CoinContext from "../context/CoinContext";
+import {ImCoinDollar} from "react-icons/im";
+import CharacterContext from "../context/CharatcerContext";
+import Character2 from "../components/Character2";
+import Character1 from "../components/Charater1";
+import Character3 from "../components/Character3";
 
 //  Todos :)
 // 1. Att man ser om vilka karatärer man har köpt
@@ -23,7 +23,7 @@ const pixelFont = Press_Start_2P({
 });
 
 export default function Game() {
-  const [snakeHead, setSnakeHead] = useState({ x: 240, y: 240 }); // Postion för Snake
+  const [snakeHead, setSnakeHead] = useState({x: 240, y: 240}); // Postion för Snake
   const [direction, setDirection] = useState("down-direction"); // Riktning för Snake
   const [isPlaying, setIsPlaying] = useState(false); // Om spelet är igång
   const [speed, setSpeed] = useState(10); // Speed för Snake
@@ -37,8 +37,8 @@ export default function Game() {
   const [highscore, setHighcore] = useState();
 
   // f
-  const { coins, setCoins } = useContext(CoinContext);
-  const { character, setCharacter } = useContext(CharacterContext);
+  const {coins, setCoins} = useContext(CoinContext);
+  const {character, setCharacter} = useContext(CharacterContext);
 
   const getEvenRandom = (max) => Math.floor(Math.random() * (max / 2) * 2); // Alltid Jämna tal
   const getOddRandom = (max) => getEvenRandom(max) + 1; // Alltid udda
@@ -130,13 +130,13 @@ export default function Game() {
   function HandleAutoDirection() {
     switch (direction) {
       case "down-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y + speed })); // Gå ner
+        return setSnakeHead((prev) => ({...prev, y: prev.y + speed})); // Gå ner
       case "up-direction":
-        return setSnakeHead((prev) => ({ ...prev, y: prev.y - speed })); // Gå upp
+        return setSnakeHead((prev) => ({...prev, y: prev.y - speed})); // Gå upp
       case "right-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x + speed })); // Gå höger
+        return setSnakeHead((prev) => ({...prev, x: prev.x + speed})); // Gå höger
       case "left-direction":
-        return setSnakeHead((prev) => ({ ...prev, x: prev.x - speed })); // Gå vänster
+        return setSnakeHead((prev) => ({...prev, x: prev.x - speed})); // Gå vänster
       default:
         return;
     }
@@ -215,7 +215,7 @@ export default function Game() {
   function HandleAddObstacle() {
     setAddObstacle([
       ...addObstacle,
-      { x: getOddRandom(565), y: getOddRandom(565) },
+      {x: getOddRandom(565), y: getOddRandom(565)},
     ]);
   }
 
@@ -270,7 +270,7 @@ export default function Game() {
 
   // Restart Game
   function restartGame() {
-    setSnakeHead({ y: 300, x: 300 });
+    setSnakeHead({y: 300, x: 300});
     setIsPlaying(true);
     setGameOver(false);
     setScore(0);
