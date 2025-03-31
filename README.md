@@ -22,7 +22,10 @@ Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake m
 - React Context API – For global state management.
 
 - Tailwind CSS – For styling.
-
+  
+## Currently deployed
+- Live at Vercel: [Live](https://chase-the-rabbit-yvfw.vercel.app/)
+  
 ## Contributors
 - [Joel](https://github.com/Joel050505)
 - [Daniel](https://github.com/Dantilldev)
