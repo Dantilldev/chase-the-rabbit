@@ -1,5 +1,5 @@
 
-# 🐇 Chase the Rabbit - Next.js App 🐉
+# 🐇 Chase the Rabbit 🐉
 
 Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake mechanics. This project was built by two students from Chas Academy while learning React and Next.js. The game challenges players to collect points, purchase characters, and track their high scores.
 
