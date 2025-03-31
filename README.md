@@ -24,7 +24,8 @@ Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake m
 - Tailwind CSS – For styling.
   
 ## Currently deployed
-- Live at Vercel: [Live](https://chase-the-rabbit-yvfw.vercel.app/) {:target="_blank"}
+- Live at Vercel: <a href="https://chase-the-rabbit-yvfw.vercel.app/" target="_blank">Live</a>
+
   
 ## Contributors
 - [Joel](https://github.com/Joel050505)
