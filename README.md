@@ -5,7 +5,7 @@ Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake m
 
 ## Features
 
-Point System – Earn points by catching the rabbit.
+*Point System – Earn points by catching the rabbit.
 
 High Score Tracking – Your best score is stored locally using localStorage.
 
@@ -21,7 +21,7 @@ Next.js – A React framework for server-side rendering and static site generati
 
 React Context API – For global state management.
 
-Tailwind CSS – A utility-first framework for efficient styling.
+Tailwind CSS – For styling.
 
 ## Contributors
 - [Joel](https://github.com/Joel050505)
