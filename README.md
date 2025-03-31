@@ -5,7 +5,7 @@ Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake m
 
 ## Features
 
--** Point System – Earn points by catching the rabbit.
+- Point System – Earn points by catching the rabbit.
 
 -** High Score Tracking – Your best score is stored locally using localStorage.
 
