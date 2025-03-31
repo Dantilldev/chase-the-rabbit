@@ -7,21 +7,21 @@ Welcome to Chase the Rabbit, a fun and engaging game inspired by classic snake m
 
 - Point System – Earn points by catching the rabbit.
 
--** High Score Tracking – Your best score is stored locally using localStorage.
+- High Score Tracking – Your best score is stored locally using localStorage.
 
--** Coin System – Collect coins by catching the rabbit and use them to purchase characters.
+- Coin System – Collect coins by catching the rabbit and use them to purchase characters.
 
--** Character Selection – Choose from one free character and two additional buyable characters.
+- Character Selection – Choose from one free character and two additional buyable characters.
 
--** Instruction Popup – A helpful guide on the front page to get you started.
+- Instruction Popup – A helpful guide on the front page to get you started.
 
 ## Technologies Used
 
--** Next.js – A React framework.
+- Next.js – A React framework.
 
--** React Context API – For global state management.
+- React Context API – For global state management.
 
--** Tailwind CSS – For styling.
+- Tailwind CSS – For styling.
 
 ## Contributors
 - [Joel](https://github.com/Joel050505)
